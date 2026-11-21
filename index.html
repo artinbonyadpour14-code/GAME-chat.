@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6c5ce7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<title>گیم‌چت</title>
+<style>
+:root{--bg:#f4f5fb;--card:#fff;--text:#1b1d2a;--mute:#6b7085;--acc:#6c5ce7;--accT:#fff;--gold:#f5b301;--goldBg:#fff6d6;--bd:#e3e5ef;--me:#e9e6ff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14151d;--card:#1f212d;--text:#eceef8;--mute:#9a9fb5;--acc:#8b7dff;--accT:#101018;--goldBg:#3a3110;--bd:#2d3042;--me:#2b2850;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14151d;--card:#1f212d;--text:#eceef8;--mute:#9a9fb5;--acc:#8b7dff;--accT:#101018;--goldBg:#3a3110;--bd:#2d3042;--me:#2b2850;color-scheme:dark}
+html,body{height:100%;width:100%;margin:0;overscroll-behavior:none}
+body{background:var(--bg);color:var(--text);font-family:system-ui,Tahoma,"Segoe UI",sans-serif;display:flex;flex-direction:column;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100%;width:100%;margin:0}
+.row{display:flex;gap:8px;overflow-x:auto;padding:8px 10px;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--bd);background:var(--card);color:var(--text);border-radius:20px;padding:7px 13px;font:inherit;font-size:14px;position:relative}
+.tab.on{background:var(--acc);color:var(--accT);border-color:var(--acc)}
+.tab b{position:absolute;top:-5px;left:-3px;background:#e84855;color:#fff;border-radius:10px;font-size:11px;padding:1px 6px}
+#pins{border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);background:var(--goldBg)}
+#pins .t{font-size:12px;color:var(--mute);padding:6px 12px 0}
+.pin{flex:none;max-width:70%;border:1px solid var(--gold);border-radius:12px;padding:8px 12px;font-size:15px;font-weight:600;background:var(--card);color:var(--text);text-align:right;font-family:inherit}
+#nb{display:none;background:#e84855;color:#fff;padding:11px 14px;font-size:15px;font-weight:700;cursor:pointer}
+#list{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--gbg,var(--bg));background-size:auto,90px 90px}
+#hd{padding:10px 14px;font-size:18px;font-weight:700;background:var(--acc);color:var(--accT);display:flex;justify-content:space-between;align-items:center}
+#hd small{font-weight:400;font-size:12px;opacity:.85}
+.m{box-shadow:0 1px 3px rgba(0,0,0,.18);background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:8px 11px;max-width:88%;align-self:flex-start}
+.m.me{align-self:flex-end;background:var(--me)}
+.m.q{border:2px solid var(--gold);background:var(--goldBg);align-self:stretch;max-width:100%;padding:12px 14px;box-shadow:0 2px 10px rgba(245,179,1,.35)}
+.m.q .x{font-size:20px;font-weight:700;line-height:1.7}
+.m.q .n{font-size:14px;font-weight:600}
+.m.q .a{font-size:14px}
+.m .n{font-size:12px;color:var(--mute);margin-bottom:2px}
+.m .x{white-space:pre-wrap;word-break:break-word;font-size:15px;line-height:1.6}
+.m .qt{font-size:12px;color:var(--mute);border-right:3px solid var(--acc);padding:2px 8px;margin-bottom:4px}
+.m .a{display:flex;gap:12px;margin-top:4px;font-size:12px;color:var(--mute)}
+.m .a button{all:unset;color:var(--acc);cursor:pointer}
+.m.rp{outline:2px dashed var(--acc);outline-offset:2px}
+.m.cur{outline:3px solid var(--acc);outline-offset:3px;box-shadow:0 0 16px var(--acc)}
+.m.flash{outline:2px solid var(--acc)}
+#bar{padding:8px 10px;border-top:1px solid var(--bd);background:var(--card)}
+#rep{display:none;font-size:12px;color:var(--mute);margin-bottom:6px}
+#rep button{all:unset;color:#e84855;margin-right:8px;cursor:pointer}
+.in{display:flex;gap:8px;align-items:flex-end}
+textarea{flex:1;resize:none;border:1px solid var(--bd);border-radius:14px;padding:9px 12px;font:inherit;font-size:16px;background:var(--bg);color:var(--text);max-height:90px;direction:rtl}
+.btn{border:0;background:var(--acc);color:var(--accT);border-radius:14px;padding:10px 16px;font:inherit;font-size:15px}
+.qb{border:1px solid var(--gold);background:var(--card);color:var(--text);border-radius:14px;padding:10px 11px;font:inherit}
+.qb.on{background:var(--gold);color:#222}
+#toast{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:50%;transform:translateX(-50%) translateY(-120px);background:var(--acc);color:var(--accT);padding:10px 16px;border-radius:14px;font-size:14px;transition:.3s;z-index:9;max-width:90%}
+#toast.s{transform:translateX(-50%) translateY(0)}
+#nm{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:10}
+#nm div{background:var(--card);padding:20px;border-radius:16px;width:80%;max-width:320px;display:flex;flex-direction:column;gap:10px}
+#nm input{border:1px solid var(--bd);border-radius:10px;padding:10px;font:inherit;background:var(--bg);color:var(--text)}
+.empty{color:var(--mute);text-align:center;margin-top:30px;font-size:14px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="row" id="tabs"></div>
+  <div id="hd"></div><div id="nb"></div>
+  <div id="pins" hidden><div class="t">📌 سنجاق‌شده‌ها</div><div class="row" id="pinrow"></div></div>
+  <div id="list"></div>
+  <div id="bar">
+    <div id="rep"></div>
+    <div class="in">
+      <button class="qb" id="qb" title="سوال">❓</button>
+      <textarea id="tx" rows="1" placeholder="یه چیزی بنویس…"></textarea>
+      <button class="btn" id="send">ارسال</button>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+const GAMES=["🔫 کالاف دیوتی","⛏️ ماینکرفت","🧱 روبلاکس","🕵️ مافیا","🪖 پابجی","🔥 فری فایر","🏎️ GTA","⚽ فوتبال","🎮 بازی‌های دیگه"];
+let game=0,msgs=[],replyTo=null,asQ=false,me={id:"",name:""},ready=false,seen=new Set(),unread={};
+const $=id=>document.getElementById(id);
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("s");setTimeout(()=>e.classList.remove("s"),3500)}
+const HUES=[8,140,28,275,215,18,48,160,235];
+function applyTheme(){
+  const h=HUES[game%HUES.length],em=GAMES[game].split(" ")[0],dk=matchMedia("(prefers-color-scheme:dark)").matches;
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'><text x='45' y='55' font-size='34' text-anchor='middle' opacity='${dk?.10:.18}' transform='rotate(-15 45 45)'>${em}</text></svg>`;
+  const base=dk?`linear-gradient(160deg,hsl(${h} 40% 12%),hsl(${h} 45% 18%))`:`linear-gradient(160deg,hsl(${h} 70% 93%),hsl(${h} 75% 84%))`;
+  const s=document.documentElement.style;
+  s.setProperty("--gbg",`${base},url("data:image/svg+xml,${encodeURIComponent(svg)}")`);
+  s.setProperty("--acc",dk?`hsl(${h} 70% 68%)`:`hsl(${h} 65% 42%)`);
+  s.setProperty("--accT",dk?"#101018":"#fff");
+  $("hd").innerHTML=`<span>${GAMES[game]}</span><small>${status}${isOwner?" · 👑 مالک":admins.has(me.id)?" · 👑 مدیر":" · 🔑"}</small>`;
+}
+function renderTabs(){$("tabs").innerHTML=GAMES.map((g,i)=>`<button class="tab ${i==game?"on":""}" data-i="${i}">${g}${unread[i]?`<b>${unread[i]}</b>`:""}</button>`).join("")}
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function render(){
+  applyTheme();renderTabs();
+  const ms=msgs.filter(m=>m.game===game),byId={};msgs.forEach(m=>byId[m.id]=m);
+  const cnt={};ms.forEach(m=>{if(m.replyTo)cnt[m.replyTo]=(cnt[m.replyTo]||0)+1});
+  const qs=ms.filter(m=>m.pinned).sort((a,b)=>b.ts-a.ts);
+  $("pins").hidden=!qs.length;
+  $("pinrow").innerHTML=qs.map(q=>`<button class="pin" data-go="${q.id}">${q.q&&cnt[q.id]?"✅":"📌"} ${esc(q.text.slice(0,60))}</button>`).join("");
+  const l=$("list"),atBottom=l.scrollHeight-l.scrollTop-l.clientHeight<80;
+  l.innerHTML=ms.length?ms.map(m=>{
+    const r=m.replyTo&&byId[m.replyTo];
+    return `<div class="m ${m.uid===me.id?"me":""} ${m.q?"q":""} ${sel.q&&m.replyTo===sel.q?(m.id===sel.cur?"cur":"rp"):""}" id="m_${m.id}">
+    <div class="n">${m.q?"⭐ ":""}${admins.has(m.uid)||m.owner?"👑 ":""}<span ${isOwner&&m.uid!==me.id?`data-a="${m.uid}" data-n="${esc(m.name)}" style="text-decoration:underline dotted"`:""}>${esc(m.name)}</span>${m.pending?" ⏳":""}</div>
+    ${m.replyTo?`<div class="qt">${r?esc(r.name)+": "+esc(r.text.slice(0,50)):"پیام حذف‌شده"}</div>`:""}
+    <div class="x">${esc(m.text)}</div>
+    <div class="a"><button data-r="${m.id}">↩️ جواب</button>${isAdm()&&!m.pending?`<button data-p="${m.id}">${m.pinned?"❌ برداشتن سنجاق":"📌 سنجاق"}</button>`:""}${cnt[m.id]?`<button data-c="${m.id}">💬 ${sel.q===m.id?"جواب "+(cyc[m.id]+1)+" از "+cnt[m.id]+" ⏭":cnt[m.id]+" جواب ↓"}</button>`:m.q?"<span>بی‌جواب</span>":""}</div></div>`}).join(""):`<div class="empty">هنوز کسی چیزی ننوشته. اولین نفر باش! 🎉</div>`;
+  if(atBottom)l.scrollTop=l.scrollHeight;
+}
+let server=[],pend=[],isOwner=false,admins=new Set(),status="⏳ در حال اتصال…",np=null;
+let notes=[],cyc={},sel={};
+function showNb(){const n=$("nb"),k=notes.length;n.style.display=k?"block":"none";if(k){const l=notes[k-1];n.textContent="💬 یکی جوابتو داد! "+l.name+": "+l.text.slice(0,40)+(k>1?" (+"+(k-1)+" تا دیگه)":"")+" — بزن ببینی"}}
+$("nb").onclick=()=>{const l=notes[notes.length-1];if(!l)return;notes=[];showNb();game=l.game;unread[game]=0;render();const el=$("m_"+l.id);if(el){el.scrollIntoView({block:"center"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),2000)}};
+function ping(){try{navigator.vibrate&&navigator.vibrate(200)}catch(e){}try{const c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.value=.1;o.start();setTimeout(()=>{o.stop();c.close()},180)}catch(e){}}
+const isAdm=()=>isOwner||admins.has(me.id);
+function refresh(){
+  const keys=new Set(server.map(m=>m.cid).filter(Boolean));
+  pend=pend.filter(p=>!keys.has(p.cid));
+  msgs=[...server,...pend].sort((a,b)=>a.ts-b.ts);render();
+}
+function needName(){if(me.name)return Promise.resolve();return np||(np=askName().then(v=>{me.name=v;ls.set("gc_name",v)}))}
+function add(list,live){
+  const byId={};server.forEach(m=>byId[m.id]=m);list.forEach(m=>byId[m.id]=m);
+  if(live)list.forEach(m=>{
+    if(seen.has(m.id))return;
+    const p=m.replyTo&&byId[m.replyTo];
+    if(p&&p.uid===me.id&&m.uid!==me.id){
+      notes.push({id:m.id,game:m.game,name:m.name,text:m.text});showNb();ping();toast(`💬 یکی جوابتو داد: ${m.name}`);
+      if(m.game!==game)unread[m.game]=(unread[m.game]||0)+1;
+      try{if(document.hidden&&Notification.permission==="granted")new Notification("یکی جوابتو داد 💬",{body:m.name+": "+m.text.slice(0,80),icon:"/icon-192.png"})}catch(e){}
+    }
+  });
+  list.forEach(m=>seen.add(m.id));
+  server=Object.values(byId).sort((a,b)=>a.ts-b.ts);refresh();
+}
+const KEY=()=>ls.get("gc_key")||"";
+async function api(path,body){
+  const r=await fetch(path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...body,uid:me.id,key:KEY()})});
+  if(!r.ok)throw new Error(r.status);return r.json();
+}
+async function send(){
+  const t=$("tx").value.trim();if(!t)return;
+  await needName();
+  const ts=Date.now(),cid=me.id+"_"+ts;
+  const d={game,text:t.slice(0,1000),name:me.name,cid,q:asQ&&!replyTo,pin:asQ&&!replyTo,replyTo:replyTo||null};
+  const keepR=replyTo,keepQ=asQ;
+  $("tx").value="";setReply(null);asQ=false;$("qb").classList.remove("on");
+  pend.push({...d,uid:me.id,ts,id:"p"+ts,pending:true});refresh();
+  const l=$("list");l.scrollTop=l.scrollHeight;
+  try{add([await api("/api/messages",d)],false);l.scrollTop=l.scrollHeight}
+  catch(e){
+    pend=pend.filter(p=>p.cid!==cid);refresh();
+    $("tx").value=t;asQ=keepQ;$("qb").classList.toggle("on",keepQ);if(keepR)setReply(keepR);
+    toast("ارسال نشد 😕 اینترنتت رو چک کن و دوباره بزن");
+  }
+}
+function setReply(id){
+  replyTo=id;const r=$("rep");
+  if(id){const m=msgs.find(x=>x.id===id);r.style.display="block";r.innerHTML=`در جواب ${esc(m?m.name:"")}: ${esc(m?m.text.slice(0,40):"")}<button id="x">لغو</button>`;$("x").onclick=()=>setReply(null);$("tx").focus()}
+  else r.style.display="none";
+}
+$("tabs").onclick=e=>{const b=e.target.closest(".tab");if(!b)return;game=+b.dataset.i;unread[game]=0;setReply(null);render();$("list").scrollTop=1e9};
+$("list").onclick=e=>{const b=e.target.closest("[data-r]");if(b)setReply(b.dataset.r);const c=e.target.closest("[data-c]");if(c){const id=c.dataset.c,rs=msgs.filter(x=>x.replyTo===id);if(rs.length){const i=sel.q===id?((cyc[id]||0)+1)%rs.length:0;cyc[id]=i;sel={q:id,cur:rs[i].id};render();const el=$("m_"+sel.cur);if(el)el.scrollIntoView({block:"center",behavior:"smooth"})}return}
+const ad=e.target.closest("[data-a]");if(ad&&isOwner){const u=ad.dataset.a,n=ad.dataset.n,on=!admins.has(u);api("/api/admin",{target:u,name:n,on}).then(()=>toast(on?"👑 "+n+" مدیر شد":"مدیریت "+n+" برداشته شد")).catch(()=>toast("نشد 😕"))}
+const p=e.target.closest("[data-p]");if(p&&isAdm()){api("/api/pin",{id:p.dataset.p}).catch(()=>toast("سنجاق نشد 😕"))}};
+$("pinrow").onclick=e=>{const b=e.target.closest("[data-go]");if(!b)return;const el=$("m_"+b.dataset.go);if(el){el.scrollIntoView({block:"center",behavior:"smooth"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1500)}};
+$("qb").onclick=()=>{asQ=!asQ;$("qb").classList.toggle("on",asQ);if(asQ)setReply(null)};
+$("send").onclick=send;
+$("tx").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}});
+function askName(){
+  return new Promise(res=>{
+    const o=document.createElement("div");o.id="nm";
+    o.innerHTML=`<div><b>اسمت چیه؟ 👋</b><input id="ni" maxlength="20" placeholder="اسم یا لقب"><button class="btn" id="ok">بزن بریم</button></div>`;
+    document.body.appendChild(o);
+    $("ok").onclick=()=>{const v=$("ni").value.trim();if(v){o.remove();res(v);try{Notification.requestPermission()}catch(e){}}};
+  });
+}
+function askKey(){
+  return new Promise(res=>{
+    const o=document.createElement("div");o.id="nm";
+    o.innerHTML=`<div><b>ورود مالک 🔑</b><input id="ki" type="password" placeholder="رمز مالک"><button class="btn" id="kok">ورود</button><button class="btn" id="kno" style="background:var(--bd);color:var(--text)">لغو</button></div>`;
+    document.body.appendChild(o);
+    $("kok").onclick=()=>{const v=$("ki").value;o.remove();res(v)};
+    $("kno").onclick=()=>{o.remove();res(null)};
+  });
+}
+async function auth(k){
+  try{const r=await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({key:k})});return !!(await r.json()).ok}catch(e){return false}
+}
+$("hd").onclick=async()=>{
+  if(isOwner)return;
+  const k=await askKey();if(!k)return;
+  if(await auth(k)){ls.set("gc_key",k);isOwner=true;render();toast("👑 مالک شدی")}else toast("رمز اشتباهه 😕");
+};
+async function load(live){
+  try{
+    const r=await fetch("/api/state"),s=await r.json();
+    admins=new Set(s.admins.map(a=>a.id));add(s.msgs,live);
+  }catch(e){}
+}
+function connect(){
+  const es=new EventSource("/events");
+  es.onopen=()=>{status="🟢 آنلاین";load(true)};
+  es.onerror=()=>{status="🔴 قطع شد، دوباره وصل میشم…";render()};
+  es.onmessage=e=>{
+    try{const d=JSON.parse(e.data);
+      if(d.t==="admins"){admins=new Set(d.list.map(a=>a.id));refresh()}
+      else add([d.m],d.t==="msg")}catch(x){}
+  };
+}
+(async()=>{
+  me.id=ls.get("gc_id")||("u"+Math.random().toString(36).slice(2,11));ls.set("gc_id",me.id);
+  me.name=ls.get("gc_name")||"";
+  render();
+  await load(false);
+  if(KEY())isOwner=await auth(KEY());
+  connect();render();needName();
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)load(true)});
+  if("serviceWorker"in navigator)navigator.serviceWorker.register("/sw.js").catch(()=>{});
+})();
+</script>
+</body>
+</html>
